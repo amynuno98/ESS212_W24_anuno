@@ -1,0 +1,5 @@
+language = "Julia"
+
+phrase = string(language, " says: Hello World!")
+
+println(phrase)
