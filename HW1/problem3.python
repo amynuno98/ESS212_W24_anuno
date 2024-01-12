@@ -1,0 +1,22 @@
+def S1_rec(n):
+    if n > 1:
+        return n + S1_rec(n-1)
+    else:
+        return 1
+
+def O1_rec(n):
+    if n > 1:
+        return 2*n - 1 + O1_rec(n-1)
+    else:
+        return 1
+
+def S2_rec(n):
+    if n > 1:
+        return n**2 + S2_rec(n-1)
+    else:
+        return 1
+
+n = 3
+s1 = S1_rec(n)
+o1 = O1_rec(n)
+s2 = S2_rec(n)
