@@ -1,0 +1,27 @@
+%%
+
+clear, close all
+
+%%
+
+
+for n = 0:5
+    disp(['S[' num2str(n) '] = ' num2str(closed_sol(n))]);
+end
+
+
+function result = closed_sol(n)
+
+a = 1 - sqrt(3);
+    b = 1 + sqrt(3);
+    A = -sqrt(3)/6;
+    B = sqrt(3)/6;
+    result = A * a^n + B * b^n;
+    rounded_result = round(result);
+    if result == rounded_result
+        result = int64(result);
+    end
+end
+
+%%
+
