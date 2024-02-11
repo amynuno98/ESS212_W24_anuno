@@ -1,3 +1,6 @@
+
+
+
 %%
 
 clear, close all
@@ -12,7 +15,7 @@ end
 
 function result = closed_sol(n)
 
-a = 1 - sqrt(3);
+    a = 1 - sqrt(3);
     b = 1 + sqrt(3);
     A = -sqrt(3)/6;
     B = sqrt(3)/6;
@@ -24,4 +27,7 @@ a = 1 - sqrt(3);
 end
 
 %%
+
+
+
 
