@@ -1,0 +1,24 @@
+%%
+
+clear, close all
+
+
+%%
+ans = sequence(5);
+
+
+%%
+
+function S = sequence(N)
+    S = zeros(1, N+1); 
+    
+    S(1) = 0;
+    S(2) = 1;
+    
+    for n = 3:N+1
+        S(n) = 2*S(n-1) + 2*S(n-2);
+    end
+    
+end
+
+%%
