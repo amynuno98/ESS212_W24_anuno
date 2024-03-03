@@ -3,7 +3,7 @@ clear, close all
 
 %%
 
-n = 2;
+n = 5;
 
 
 disp(strcat('Recursive algorithm for S1 :',num2str(S1_rec(n))))

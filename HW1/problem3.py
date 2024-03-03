@@ -34,7 +34,7 @@ def S2_iter(n):
         S += i**2
     return S
 
-n = 2
+n = 5
 
 print(f"Recursive algorithm for S1: {S1_rec(n)}")
 print(f"Recursive algorithm for O1: {O1_rec(n)}")
