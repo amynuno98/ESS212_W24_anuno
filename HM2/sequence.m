@@ -1,14 +1,3 @@
-%%
-
-clear, close all
-
-
-%%
-ans = sequence(5);
-
-
-%%
-
 function S = sequence(N)
     S = zeros(1, N+1); 
     
@@ -21,4 +10,3 @@ function S = sequence(N)
     
 end
 
-%%
