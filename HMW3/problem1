@@ -1,0 +1,121 @@
+
+
+%%
+
+clear, close all
+
+%% Finding values a,b,c using system of linear equations
+
+x = [-4, 0, 4];
+y = [30, 2, 6];
+
+A = [x.^2', x', ones(3, 1)];
+
+d = y';
+
+coefficients = A \ d;
+
+a = coefficients(1);
+b = coefficients(2);
+c = coefficients(3);
+
+fprintf('Coefficients [a, b, c]: %f, %f, %f\n', a, b, c);
+
+%%
+d = [30;2;6];
+
+%% Project Matrix
+
+P = A * inv(A' * A) * A';
+
+disp("The projection matrix P:");
+
+disp(P)
+
+%% Predicted 
+
+predicted = P * d;
+
+disp("The predicted values are:");
+
+disp(predicted)
+
+%% Error of vector e 
+
+e = d - predicted;
+
+disp("The error vector e is:");
+
+disp(e)
+
+%% Newton's Method
+
+% Initial iteration
+A = 1;
+B = 2;
+C = 3;
+
+% taylor series
+f = @(A, B, C) sum((y - A*(x - B).*(x - C)).^2);
+f_A = @(A, B, C) -2*sum((x - B).*(x - C).*(y - A*(x - B).*(x - C)));
+f_B = @(A, B, C) 2*A*sum((x - B).*(y - A*(x - B).*(x - C))) + 2*A*sum((x - C).*(y - A*(x - B).*(x - C)));
+f_C = @(A, B, C) 2*A*sum((x - B).*(y - A*(x - B).*(x - C))) + 2*A*sum((x - B).*(y - A*(x - B).*(x - C)));
+
+tol = 1e-6;
+iter = 100000;
+
+%newton's method
+for i = 1:iter
+    df = [f_A(A, B, C), f_B(A, B, C), f_C(A, B, C)];
+    delta = df \ -f(A, B, C);
+    A = A + delta(1);
+    B = B + delta(2);
+    C = C + delta(3);
+    if max(abs(delta)) < tol
+        break;
+    end
+end
+
+fprintf('Estimated values:\n');
+fprintf('A = %f\n', A);
+fprintf('B = %f\n', B);
+fprintf('C = %f\n', C);
+
+%% Plotting
+
+% Importing initial values
+A = 1;
+B = 2;
+C = 3;
+
+con_B = [];
+con_C = [];
+
+% Newton's method
+for i = 1:iter
+    df = [f_A(A, B, C) f_B(A, B, C) f_C(A, B, C)]; %Jacobian
+    delta = df \ -f(A, B, C); %solve
+    A = A + delta(1);
+    B = B + delta(2);
+    C = C + delta(3);
+
+    con_B(end+1) = B;
+    con_C(end+1) = C;
+
+    if max(abs(delta)) < tol
+        break;
+    end
+end
+
+% Plotting convergence in the B,C plane
+figure(1)
+plot(con_B, con_C, '-','LineWidth',3);
+xlabel('B');
+ylabel('C');
+title('Convergence of Newton''s Method in B,C Plane');
+grid on;
+set(gca,'FontSize',20)
+
+%%
+
+
