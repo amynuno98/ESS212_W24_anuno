@@ -1,0 +1,125 @@
+
+%%
+
+clear, close all
+
+%% Download ONI Index 
+
+clear, close all 
+
+%% 
+
+url = 'https://psl.noaa.gov/data/correlation/oni.data';
+
+ONI_table = readtable(url, 'HeaderLines', 0, 'ReadVariableNames', true, 'FileType', 'text');
+
+ONI_table = ONI_table(1:74, :);
+
+%%
+
+index = 1;
+
+year = [];
+
+%%
+for i = 1:74
+
+    %loop per time
+    year_num = ONI_table.x1950(i);
+
+    year = [year, repmat(year_num, 1, 12)];
+
+    for b = 2: 13
+
+        ONI(index) = ONI_table{i, [b]};
+
+        month(index) = b-1;
+
+        dayssince(index) = daysact(datetime(year_num,b-1,1));
+
+        index = index + 1;
+
+    end
+
+end
+
+%%
+
+day = ones(888,1);
+
+dayssince = dayssince';
+
+month = month';
+
+year = year';
+
+ONI = ONI';
+
+time = table(day, month, year, dayssince, 'VariableNames', {'day', 'month', 'year', 'Days Since Beginning'});
+
+clear year month dayssince day url year_num ONI_table i b index
+
+%% 
+
+%di = μ + (ti − t)m.
+
+time2 = 1:888;
+
+time2 = time2';
+
+t = ONI; % ONI data
+
+
+%%
+
+trend_model = @(params, t) params(1) + (t - mean(t)) * params(2);
+
+% Initial guess for parameters
+initial_guess = [0, 0]; % [mu, m]
+
+% Fit the trend model using lsqcurvefit
+param = lsqcurvefit(@(params, t) trend_model(params, t), initial_guess, time2, t);
+
+% Extract parameters
+mu = param(1);
+m = param(2);
+
+% Calculate the trend line
+projected_trend = trend_model(param, time2);
+
+%%
+time3 = time.("Days Since Beginning");
+
+figure(1)
+
+plot(time3, t, 'k', 'LineWidth', 2);
+hold on
+plot(time3,projected_trend, 'r', 'LineWidth', 2);
+
+xlim([datenum('January 1, 1950') datenum('dec 25, 2020')])
+datetick('x','keeplimits')
+set(gca, 'FontSize', 16);
+xlabel('Time');
+ylabel('ONI Index');
+title('ONI Data with Projected Trend Model');
+legend('ONI Data', 'Projected Trend Model');
+grid on;
+hold off;
+
+%%
+
+
+% Calculate residuals
+est = ONI - projected_trend; %actual data minus trend
+
+std_est = std(est);
+
+%% Printing 
+
+% Output
+disp(['Estimated value of mu: ' num2str(mu)]);
+disp(['Estimated value of m: ' num2str(m)]);
+disp(['Standard deviation of the components of the e vector: ' num2str(std_est)]);
+
+%%
+
