@@ -1,0 +1,36 @@
+
+%%
+clear, close all
+
+%% HMW 4 problem 2
+% 
+% x = [0, 1, 2, 3, 4];
+% y = [0.0434, 1.0343, -0.2588, 3.68622, 4.3188];
+%sigma = [0.1, 0.1 NaN NaN NaN]; 
+
+x = [2, 3, 4]';
+y = [-0.2588, 3.68622, 4.3188]';
+
+% x = x(~isnan(sigma));
+% y = y(~isnan(sigma));
+% sigma = sigma(~isnan(sigma));
+
+A = [ones(size(x)), x];
+
+beta = (A' * A) \ A' * y;
+
+AB = A * beta;
+
+e = AB - y;
+
+N = length(y);
+
+sigma_squared = (e' * e) / (N + 1);
+
+disp(sigma_squared)
+
+sigma_final = sqrt(sigma_squared);
+
+disp(sigma_final)
+
+%%
